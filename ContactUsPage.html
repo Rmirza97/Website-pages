@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Asset Mapping | Contact Us</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LfQfrImAAAAAGjkM23p7gWX35b09f_itSBx5pte"></script>
+  
+    <script>
+      function onClick(e) {
+        e.preventDefault();
+        grecaptcha.enterprise.ready(async () => {
+          const token = await grecaptcha.enterprise.execute('6LfQfrImAAAAAGjkM23p7gWX35b09f_itSBx5pte', {action: 'LOGIN'});
+          // See https://cloud.google.com/recaptcha-enterprise/docs/create-assessment
+        });
+      }
+      </script>
+</head>
+<body> 
+
+  <section id="contact" class="section-bg wow fadeInUp" style="visibility: visible; animation-name: fadeInUp;">
+
+    <div class="container">
+
+      <div class="section-header">
+        <h2>Let's Get In Touch!</h2>
+        <p>Want to connect with us? That's great! Send us an email and we will get back to you as soon as possible!</p>
+      </div>
+<form>   
+    <div class="Container">
+        <h1>Contact Us</h1>
+        <h3>Please fill this form in a decent manner.</h3>
+    </div>
+    <br>
+<form action="/submit-form" href="contactus.php" method="post">
+    <label for="name">Full Name:</label>
+    <input type="text" id="name" placeholder="Enter your Full name" name="name" required>
+    
+    <label for="number">Phone Number:</label>
+    <input type="number" id="Number" placeholder="Enter your Phone number" name="Number" required>
+    
+    <label for="message">Message:</label>
+    <textarea id="message" name="message" placeholder="Message" rows="5" required></textarea>
+    
+    <input type="submit" value="Submit" onclick="submitData1()">
+    
+</form>
+<br>
+<br>
+
+<footer>
+  <div class="container">
+    <p>Powered by <u>Northern Lights Analytics</u></p>
+    <p>&copy; 2023 All rights reserved.
+    <img style="margin: -40px 0;" src="NLA logoTriCol.jpg">
+    </p>
+  </div>
+</footer>
+
+<style>
+  
+footer {
+    bottom: 0;
+    width: 100%;
+    height: 100px; /* Height of the footer */
+    background-color: #333;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+
+}
+      
+footer img {
+          text-align:end;
+          margin: -20px;
+          max-height: 60px;
+          border: 1px solid #110f0f;
+}
+
+</style>
+
+<style>
+
+
+/* Sections Header
+--------------------------------*/
+
+.section-header {
+  margin-bottom: 2px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.section-header::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 60px;
+  height: 5px;
+  background: #e78529;
+  bottom: 0;
+  left: calc(50% - 25px);
+}
+
+.section-header h2 {
+  font-size: 36px;
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
+.section-header p {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  color: #06103a;
+}
+ 
+h1{
+    font-size: 35px;
+}
+body {
+  font-family:Arial; 
+  background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(142, 247, 255, 0.5)), url('4.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  color:black;
+}
+
+form {
+  width: 500px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  border: 2px solid black;
+}
+
+input[type="submit"] {
+  background-color: black;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+input[type="submit"]:hover {
+  background-color: gray;
+}
+
+input[type="submit"]:active {
+  background-color: gray;
+}
+
+</style>
+
+<script>
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+var firebaseConfig = {
+  apiKey: "AIzaSyBlkMnxDx0lOtsW3nLCvvYsLkAdjlWlrjU",
+  authDomain: "crop-monitoring-f32ad.firebaseapp.com",
+  databaseURL: "https://crop-monitoring-f32ad-default-rtdb.firebaseio.com",
+  projectId: "crop-monitoring-f32ad",
+  storageBucket: "crop-monitoring-f32ad.appspot.com",
+  messagingSenderId: "162665603391",
+  appId: "1:162665603391:web:1698939111f3a3795af38a",
+  measurementId: "G-W7DHTVZXEG"
+};
+
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      const appCheck = firebase.appCheck();
+appCheck.activate('6LfQfrImAAAAAGjkM23p7gWX35b09f_itSBx5pte', true);
+
+
+      // Get a reference to the Firestore database
+  // Assuming you have a Firebase Realtime Database instance
+  var database = firebase.database();
+  var db = firebase.firestore();
+
+
+// Submit data to Firebase
+      function submitData1() {
+        var NameInput = document.getElementById("name");
+        var NumberInput = document.getElementById("Number");
+        var MessageInput = document.getElementById("message");
+      
+        var name = NameInput.value;
+        var Number = NumberInput.value;
+        var message = MessageInput.value;
+      
+        // Save data to Firestore
+        db.collection("ContactUs")
+          .add({
+            name: name,
+            Number: Number,
+            message: message,
+          })
+          .then(function (docRef) {
+            console.log("Document written with ID: ", docRef.id);
+            // Handle success and update UI
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+            //Handle error and update UI
+          });
+      }
+
+</script>
+
+<!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+
+<!-- Add Firebase products that you want to use -->
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/6.0.2/firebase-database.js"></script>
+</body>
+</html>

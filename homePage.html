@@ -1,0 +1,423 @@
+<html lang="en">
+  <head>
+    <title>Asset Mapping | Home</title>
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    
+    <style>
+            /* General Styles */
+body {
+      font-family: Arial;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.5), rgba(142, 247, 255, 0.5)), url('4.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+      color: black;
+      margin: 0px;
+}
+
+
+.max-width-200 {
+      max-width: 200px;
+}
+
+      
+h2 {
+      text-align: center;
+      font-size: 35px;
+      margin-top: 1%;
+}
+
+      
+h3 {
+      font-size: 20px;
+}
+
+      
+p {
+      text-align: center;
+      color: black;
+  }
+
+      
+.asset {
+        font-size: 30px;
+        position: absolute;
+        top: 10;
+        nav-right: 50;
+        margin: 5px 70px;
+        color: aliceblue;
+}
+
+form {
+        width: 20rem;
+        color: whitesmoke;
+        backdrop-filter: blur(16px) saturate(180%);
+        -webkit-backdrop-filter: blur(16px) saturate(180%);
+}
+
+      
+input {
+        width: 100%;
+        margin: 10px 0;
+        border-radius: 5px;
+        padding: 15px 18px;
+        box-sizing: border-box;
+}
+
+      
+button {
+        font-size: 20px;
+        background-color: #363535;
+        color: white;
+}
+
+      
+button:hover {
+        opacity: 0.4;
+        cursor: pointer;
+}
+
+    
+ul {
+        list-style-type: none;
+        margin: 0px;
+        padding: 4px;
+        overflow: hidden;
+        background: radial-gradient(
+          circle,
+          rgb(226, 82, 24),
+          rgb(121, 95, 39),
+          rgb(145, 143, 23)
+        );
+}
+
+      
+li input {
+        width: 100%;
+        height: 25px;
+}
+
+      li {
+        float: right;
+      }
+
+      li a {
+        display: block;
+        color: white;
+        text-align: top;
+        padding: 14px 16px;
+        text-decoration: none;
+      }
+
+      /* Change the link color (black) on hover */
+      li a:hover {
+        background-color: #111;
+      }
+
+      .logo {
+        position: absolute;
+        top: 0;
+        nav-left: 0;
+        height: auto;
+      }
+
+      select option {
+        font-size: medium;
+        width: 450px;
+      }
+
+      .max-width-200 {
+        max-width: 200px;
+        margin: 10px;
+      }
+
+
+.googlemap1{
+  height: 800;
+  width: 70%;
+  float: left;
+  margin: 5px;
+
+}
+
+</style>
+  </head>
+  <body>
+    <div>
+      <img src="images/mainmenu.png" class="logo" width="52" height="52" />
+      <h1 class="asset">Real-time Asset Mapping</h1>
+    </div>
+    <nav>
+        <ul>
+          <li><a href="index.html" id="logoutButton">Logout</a></li>
+          <li><a href="ContactUss.html"> Contact Us </a></li>
+      </ul>
+    </nav>
+
+ 
+<!-- Inside the body tag -->
+<!-- Inside the body tag -->
+<div class="container" style="display: flex; justify-content: space-between;">
+  <div 
+
+  class="googleMap1" id="googleMap"></div>
+  <div style="margin-right: 100px; ">
+    <input 
+    style="width: 500px;"
+    type="text" id="searchIndex" placeholder="Search by Index">
+    <button 
+  style="height: 50px;"
+    onclick="searchFromFirebase()">Search</button>
+    <div id="searchResults"></div>
+  </div>
+</div>
+
+
+
+  <div id="images" class="images_show">
+    <div id="imageContainer"></div>
+  </div>
+</div>
+
+
+<script>
+document.getElementById('logoutButton').addEventListener('click', logout);
+
+// Logout function
+function logout() {
+  firebase.auth().signOut().then(function() {
+    // Sign-out successful.
+    window.location.href = "index.html"; // Redirect to the login page
+  }).catch(function(error) {
+    // An error happened.
+    console.log(error);
+  });
+}
+
+
+// Your web app's Firebase configuration
+  var firebaseConfig = {
+  apiKey: "AIzaSyD0i4f81iFx0Lh1kCzZ8v8lYYNANfKNDjg",
+  authDomain: "assetmapping-ab829.firebaseapp.com",
+  databaseURL: "https://assetmapping-ab829-default-rtdb.firebaseio.com",
+  projectId: "assetmapping-ab829",
+  storageBucket: "assetmapping-ab829.appspot.com",
+  messagingSenderId: "1033224358251",
+  appId: "1:1033224358251:web:91b75aadfe821d3872a42e",
+  measurementId: "G-TFWW6XKRNY"
+      };
+
+// Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+// Get a reference to the Firestore database
+// Assuming you have a Firebase Realtime Database instance
+  var database = firebase.database();
+  var db = firebase.firestore();
+
+  function displaySearchResult(result) {
+    var searchResultsDiv = document.getElementById("searchResults");
+    searchResultsDiv.innerHTML = ""; // Clear previous search results
+    var imageContainer = document.getElementById("imageContainer");
+    imageContainer.innerHTML = ""; // Clear previous images
+
+    if (result) {
+      var resultDiv = document.createElement("div");
+
+      // Display the relevant data fields
+      resultDiv.innerHTML = `
+        <h2>${result.name}</h2>
+        <p>Phone: ${result.phone}</p>
+        <p>email: ${result.email}</p>
+        <p>Index: ${result.id}</p>
+        <p>Time: ${result.time}</p>
+        <p>Gender: ${result.gender}</p>
+        <p>Date of Birth: ${result.dob}</p>
+        <p>City: ${result.cityname}</p>
+        <p>State: ${result.statename}</p>
+        <p>Bank Name: ${result.bankname}</p>
+        <p>Bank Account Number: ${result.bankacnum}</p>
+        <p>Account Holder Name: ${result.acholdername}</p>
+        <p>Bank Branch: ${result.bankbranch}</p>
+        <p>Bank City: ${result.bankcity}</p>
+        <p>IFSC Code: ${result.ifsccode}</p>
+        <p>Adhar: ${result.adhar}</p>
+        <p>Gut: ${result.gut}</p>
+        <p>Date: ${result.date}</p>
+        <p>Land Area: ${result.landarea}</p>
+        <p>Latitude: ${result.latitudee}</p>
+        <p>Longitude: ${result.longitudee}</p>
+        <p>Accuracy: ${result.accuracy}</p>
+        <p>villagename: ${result.villagename}</p>
+
+        <p>Images:</p>
+      `
+      for (var i = 1; i <= 8; i++) {
+    var imageUrl = result["img" + i];
+    if (imageUrl) {
+      var img = document.createElement("img");
+      img.src = imageUrl;
+      img.alt = "Image " + i;
+      img.className = "max-width-200";
+      // img.style.marginTop = "150px"; 
+
+      // Open full-size image in new tab on click
+      img.addEventListener("click", function (e) {
+        window.open(this.src, "_blank");
+      });
+
+      imageContainer.appendChild(img);
+    }
+  }
+
+      ;
+
+      searchResultsDiv.appendChild(resultDiv);
+    } else {
+      searchResultsDiv.innerHTML = "<p>No data found for the searched index</p>";
+    }
+  }
+
+  function searchFromFirebase() {
+    var query = document.getElementById("searchIndex").value;
+
+    firebase
+      .firestore()
+      .collection("users")
+      .where("phone", "==", query)
+      .get()
+      .then((querySnapshot) => {
+        if (!querySnapshot.empty) {
+          const searchResult = querySnapshot.docs.map((doc) => doc.data());
+          console.log(searchResult);
+          displaySearchResult(searchResult[0]); // Accessing the first element of the array
+          displayMap(searchResult[0].latitudee, searchResult[0].longitudee);
+        } else {
+          console.log("No data found for the searched index");
+        }
+      })
+      .catch((error) => {
+        console.error("Error getting data: ", error);
+      });
+  }
+
+  function displayMap(latitude, longitude) {
+    var mapOptions = {
+      center: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+      zoom: 12,
+    };
+    var map = new google.maps.Map(
+      document.getElementById("googleMap"),
+      mapOptions
+    );
+    var marker = new google.maps.Marker({
+      position: { lat: parseFloat(latitude), lng: parseFloat(longitude) },
+      map: map,
+    });
+  }
+
+
+
+
+      
+      // Map function for pinpointing location
+      function myMap() {
+        var location = document.getElementById("location").value.split(",");
+        var latLng = new google.maps.LatLng(location[0], location[1]);
+        var mapProp = {
+          center: latLng,
+          zoom: 12,
+        };
+
+        var map = new google.maps.Map(
+          document.getElementById("googleMap"),
+          mapProp
+        );
+      }
+
+      // Function to pin Maharashtra on the map
+      function initMap() {
+        var mapOptions = {
+          center: { lat: 19.7515, lng: 75.7139 },
+          zoom: 7,
+        };
+        var map = new google.maps.Map(
+          document.getElementById("googleMap"),
+          mapOptions
+        );
+      }
+
+
+
+      // Retrieve data from Firestore based on selected city
+      var selectedCity = "Nagpur";
+      if (selectedCity) {
+        db.collection("locations")
+          .where("City", "==", selectedCity)
+          .get()
+          .then(function (querySnapshot) {
+            querySnapshot.forEach(function (doc) {
+              var data = doc.data();
+              var marker = new google.maps.Marker({
+                position: { lat: data.latitude, lng: data.longitude },
+                map: map,
+                title: data.name,
+              });
+              markers.push(marker);
+            });
+          })
+          .catch(function (error) {
+            console.error("Error getting data: ", error);
+          });
+      }
+
+      // Clear all markers from the map
+      function clearMarkers() {
+        markers.forEach(function (marker) {
+          marker.setMap(null);
+        });
+        markers = [];
+      }
+
+      // Submit data to Firebase
+      function submitData() {
+        var TalukaInput = document.getElementById("taluka1");
+        var VillageInput = document.getElementById("village1");
+        var LandAreaInput = document.getElementById("LandArea");
+        var gatNumberInput = document.getElementById("gatNumber");
+
+        var taluka1 = TalukaInput.value;
+        var village1 = VillageInput.value;
+        var LandArea = LandAreaInput.value;
+        var gatNumber = gatNumberInput.value;
+
+        // Save data to Firestore
+        db.collection("users")
+          .add({
+            taluka1: taluka1,
+            village1: village1,
+            LandArea: LandArea,
+            gatNumber: gatNumber,
+          })
+          .then(function (docRef) {
+            console.log("Document written with ID: ", docRef.id);
+            // Handle success and update UI
+          })
+          .catch(function (error) {
+            console.error("Error adding document: ", error);
+            //Handle error and update UI
+          });
+      }
+    </script>
+ 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXVNnvGu4Dx8042F7fgFhJ9tJPW9RwI9E&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXVNnvGu4Dx8042F7fgFhJ9tJPW9RwI9E&callback=initMap"></script>
+
+  </body>
+</html>
