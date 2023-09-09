@@ -2,11 +2,7 @@
   <head>
     <title>Asset Mapping | Home</title>
     <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <!-- Add your Firebase files here -->
     
     <style>
             /* General Styles */
@@ -202,16 +198,7 @@ function logout() {
 
 
 // Your web app's Firebase configuration
-  var firebaseConfig = {
-  apiKey: "AIzaSyD0i4f81iFx0Lh1kCzZ8v8lYYNANfKNDjg",
-  authDomain: "assetmapping-ab829.firebaseapp.com",
-  databaseURL: "https://assetmapping-ab829-default-rtdb.firebaseio.com",
-  projectId: "assetmapping-ab829",
-  storageBucket: "assetmapping-ab829.appspot.com",
-  messagingSenderId: "1033224358251",
-  appId: "1:1033224358251:web:91b75aadfe821d3872a42e",
-  measurementId: "G-TFWW6XKRNY"
-      };
+  //add your Firebase configuration here, which you will find in project settings in your firebase web app
 
 // Initialize Firebase
       firebase.initializeApp(firebaseConfig);
@@ -415,9 +402,9 @@ function logout() {
           });
       }
     </script>
- 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXVNnvGu4Dx8042F7fgFhJ9tJPW9RwI9E&callback=myMap"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXVNnvGu4Dx8042F7fgFhJ9tJPW9RwI9E&callback=initMap"></script>
+            
+    <script src="https://maps.googleapis.com/maps/api/js?key=AddYourApiKeyHere&callback=myMap"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AddYourApiKeyHere&callback=initMap"></script>
 
   </body>
 </html>
